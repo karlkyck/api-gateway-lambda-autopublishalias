@@ -1,0 +1,15 @@
+# Intellij
+.idea
+*.iml
+
+# Node
+node_modules
+
+# SAM
+sam-generated.yaml
+
+# OSX
+.DS_Store
+
+# Build
+dist

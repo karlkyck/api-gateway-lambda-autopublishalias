@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "target": "es6",
+    "lib": [
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "exclude": [
+    "node_modules",
+    "**/__tests__/**/*"
+  ]
+}

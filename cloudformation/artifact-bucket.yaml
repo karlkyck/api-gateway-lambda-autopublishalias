@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+
+Outputs:
+  ArtifactBucket:
+    Description: The name of the artifact bucket
+    Value: !Ref ArtifactBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-artifact-bucket

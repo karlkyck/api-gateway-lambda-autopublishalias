@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  DeploymentBucket:
+    Type: String
+
+Globals:
+  Function:
+    Runtime: nodejs10.x
+    Timeout: 180
+    AutoPublishAlias: live
+
+Resources:
+
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: live
+      EndpointConfiguration: REGIONAL
+      DefinitionBody:
+        'Fn::Transform':
+          Name: AWS::Include
+          Parameters:
+            Location: !Sub s3://${DeploymentBucket}/openapi.yaml
+
+  ListPostsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: ListPostsHandler.handler
+      CodeUri: ./dist
+      Events:
+        ApiGatewayApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /api/posts
+            Method: get

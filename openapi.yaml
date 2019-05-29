@@ -1,0 +1,64 @@
+---
+openapi: 3.0.0
+info:
+  title: API Gateway Lambda AutoPublishAlias Example
+  version: 1.0.0
+
+paths:
+  /api/posts:
+    get:
+      summary: List Posts
+      operationId: listPosts
+      responses:
+        '200':
+          description: Retrieve the list of Posts
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ListPostsResponseBody'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ListPostsFunction.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+
+components:
+  schemas:
+    BasePost:
+      type: object
+      required:
+        - title
+        - description
+        - publishedDate
+        - content
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        publishedDate:
+          type: string
+          format: date-time
+        content:
+          type: string
+    Post:
+      allOf:
+        - $ref: '#/components/schemas/BasePost'
+        - type: object
+          required:
+            - id
+            - createdDate
+            - updatedDate
+          properties:
+            id:
+              type: string
+            createdDate:
+              type: string
+              format: date-time
+            updatedDate:
+              type: string
+              format: date-time
+    ListPostsResponseBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/Post'
